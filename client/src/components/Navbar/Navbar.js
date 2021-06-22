@@ -27,21 +27,15 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static"> 
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Hello There!
         </Typography>
-        <Button color="inherit" onClick={handleOpen}>
-          Signup
-        </Button>
-        <Button color="inherit" onClick={handleOpen}>
+        <Button href="/" color="inherit" onClick={handleOpen}>
           Signin
         </Button>
-        <Button color="inherit" onClick={handleOpen}>
-          User Details
-        </Button>
-        <Button color="inherit" onClick={handleOpen}>
+        <Button href="/components" color="inherit" onClick={handleOpen}>
           Components
         </Button>
       </Toolbar>

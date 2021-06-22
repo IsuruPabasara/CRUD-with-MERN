@@ -7,10 +7,11 @@ import { useDispatch } from 'react-redux';
 import routerImg from '../../../images/image.jpeg';
 import { deletePost } from '../../../actions/posts';
 import useStyles from './styles';
-
+ 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  console.log(post);
 
   return (
     <Card className={classes.card}>
