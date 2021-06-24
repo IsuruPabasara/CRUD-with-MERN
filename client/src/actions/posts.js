@@ -1,12 +1,11 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE} from '../constants/actionTypes';
-
-import * as api from '../api/index.js';
+import axios from 'axios';
+const urlPost = 'http://localhost:5000/posts';
 
 export const getPosts = () => async (dispatch) => {
   try {
-    const { data } = await api.fetchPosts();
+    const { data } = await axios.get(urlPost);
 
-    dispatch({ type: FETCH_ALL, payload: data });
+    dispatch({ type: 'FETCH_ALL', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -14,9 +13,9 @@ export const getPosts = () => async (dispatch) => {
 
 export const createPost = (post) => async (dispatch) => {
   try {
-    const { data } = await api.createPost(post);
+    const { data } = await axios.post(urlPost, post);
 
-    dispatch({ type: CREATE, payload: data });
+    dispatch({ type: 'CREATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -24,9 +23,9 @@ export const createPost = (post) => async (dispatch) => {
 
 export const updatePost = (id, post) => async (dispatch) => {
   try {
-    const { data } = await api.updatePost(id, post);
+    const { data } = await axios.patch(`${urlPost}/${id}`, post);
 
-    dispatch({ type: UPDATE, payload: data });
+    dispatch({ type: 'UPDATE', payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -34,9 +33,9 @@ export const updatePost = (id, post) => async (dispatch) => {
 
 export const deletePost = (id) => async (dispatch) => {
   try {
-    await api.deletePost(id);
+    await axios.delete(`${urlPost}/${id}`);
 
-    dispatch({ type: DELETE, payload: id });
+    dispatch({ type: 'DELETE', payload: id });
   } catch (error) {
     console.log(error.message);
   }

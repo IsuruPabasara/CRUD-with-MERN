@@ -1,55 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Grow, Grid } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import React, {useState, useEffect } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import axios from 'axios';
+import Home from './components/Home';
+import Register from './components/Auth/Register';
+import Login from './components/Auth/Login';
+import UserContext from './context/userContext';
+import Header from './components/Header/Header';
 
-import Posts from './components/Posts/Posts';
-import Form from './components/Form/Form';
-import Signin from './components/Signin/Signin';
-import { getPosts } from './actions/posts';
-import useStyles from './styles';
-import Navbar from './components/Navbar/Navbar'
-import Users from './components/Users/Users';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+function App() {
+  const [ userData, setUserData] = useState({
+    token: undefined,
+    user: undefined
+  });
 
-
-const App = () => {
-  const [currentId, setCurrentId] = useState(0);
-  const [currentIdUser, setCurrentIdUser] = useState(0);
-  const dispatch = useDispatch();
-  const classes = useStyles();
-
-  const dispatchUser = useDispatch();
   useEffect(() => {
-    dispatch(getPosts());
-  }, [currentId, dispatch]);
+    const checkLoggedIn = async () => {
+      let token = localStorage.getItem("auth-token");
+      if(token === null){
+        localStorage.setItem("auth-token", "");
+        token = "";
+      }
+      const tokenResponse = await axios.post('http://localhost:5000/users/tokenIsValid', null, {headers: {"x-auth-token": token}});
+      if (tokenResponse.data) {
+        const userRes = await axios.get("http://localhost:5000/users/", {
+          headers: { "x-auth-token": token },
+        });
+        setUserData({
+          token,
+          user: userRes.data,
+        });
+      }
+    }
+
+    checkLoggedIn();
+  }, []);
 
   return (
-    <Container maxWidth="lg">
-      <Navbar/><br></br>      
-      <Grow in>
-        <Container>
-            <Router>
-              <Switch>
-                <Route exact path='/' component={()=>(
-                  <Grid container justify="space-between" alignItems="stretch" spacing={3}>
-                    <Users/>
-                    <Signin currentIdUser={currentIdUser} setCurrentIdUser={setCurrentIdUser}/>
-                  </Grid>)}
-                />
-                <Route path= '/components' component={()=>(
-                  <Grid container justify="space-between" alignItems="stretch" spacing={3}>
-                    <Posts/>
-                    <Form currentId={currentId} setCurrentId={setCurrentId}/>
-                  </Grid>)}
-                />
-              </Switch>
-            </Router>
-        </Container>
-      </Grow>
-      <br></br>
-          
-    </Container>
+    <BrowserRouter>
+      <UserContext.Provider value={{ userData, setUserData }}>
+      <Header />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+        </Switch>
+        </UserContext.Provider>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Paper, Grid } from '@material-ui/core';
+import { TextField, Button, Typography, Paper, Grid, Container } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useStyles from './styles';
@@ -36,12 +36,12 @@ const Form = ({ currentId, setCurrentId }) => {
     <Grid item xs={12} sm={4}>
     <Paper className={classes.paper}>
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-        <Typography variant="h6">{currentId ? `Editing "${post.title}"` : 'Creating a Component'}</Typography>
+        <Typography variant="h6">{currentId ? `Editing "${post.title}"` : 'Create a Component'}</Typography>
         <TextField name="creator" variant="outlined" label="Creator" fullWidth value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })} />
-        <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
-        <TextField name="status" variant="outlined" label="Status" fullWidth multiline rows={4} value={postData.status} onChange={(e) => setPostData({ ...postData, status: e.target.value })} />
+        <TextField name="component" variant="outlined" label="Component" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
+        <TextField name="status" variant="outlined" label="Status" fullWidth value={postData.status} onChange={(e) => setPostData({ ...postData, status: e.target.value })} />
         <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
-        <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
+        <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" onClick={clear} fullWidth>Clear</Button>
       </form>
     </Paper>
     </Grid>
