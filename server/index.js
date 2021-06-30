@@ -9,6 +9,7 @@ import usersRoutes from './routes/users.js';
 
 
 const app = express();
+app.use(express.json());
 dotenv.config();
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }))

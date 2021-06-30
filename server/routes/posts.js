@@ -1,11 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
-
+import auth from "../middleware/auth.js"
 import Post from '../models/post.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => { 
+router.get('/',auth, async (req, res) => { 
     try {
         const post = await Post.find();            
         res.status(200).json(post);
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/:id', async (req, res) => { 
+router.get('/:id',auth, async (req, res) => { 
     const { id } = req.params;
     try {
         const post = await Post.findById(id);
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/',auth, async (req, res) => {
     const { title, status, creator} = req.body;
     const newPost = new Post({ title, status, creator})
     try {
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id',auth, async (req, res) => {
     const { id } = req.params;
     const { title, status, creator} = req.body;
     
@@ -49,7 +49,7 @@ router.patch('/:id', async (req, res) => {
     res.json(updatedPost);
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
     await Post.findByIdAndRemove(id);

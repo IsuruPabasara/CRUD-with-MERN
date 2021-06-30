@@ -21,17 +21,20 @@ function AuthOptions () {
     const history = useHistory();
     const classes = useStyles();
     const register = () => history.push("/register");
-    const login = () => history.push("/login");
+    const login = () => history.push("/");
+    const allPosts = () => history.push("/posts");
     
     const logout = () => {
         setUserData({
             token: undefined,
             user: undefined
         })
-        localStorage.setItem("auth-token","");
+        localStorage.setItem("authToken","");
     };
-
     
+    console.log("Navbar")
+console.log(userData)
+
     return (
         <AppBar position="static"> 
             {userData.user ? 
@@ -40,30 +43,28 @@ function AuthOptions () {
                 <Typography variant="h6" className={classes.title}>
                 Hello There!
                 </Typography>
-                <Button href="/" color="inherit" onClick={logout}>
+                <Button color="inherit" onClick={allPosts}>
+                Components
+                </Button>
+                <Button color="inherit" onClick={logout}>
                 Logout
                 </Button>
+                
             </Toolbar>
             ) : (
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                 Please sign in or register
                 </Typography>
-                <Button href="/register" color="inherit" onClick={register}>
+                <Button color="inherit" onClick={register}>
                 Sign up
                 </Button>
-                <Button href="/login" color="inherit" onClick={login}>
+                <Button color="inherit" onClick={login}>
                 Login
                 </Button>
             </Toolbar>
             )}
-        </AppBar>
-        
-    )
-    
+        </AppBar>   
+    )   
 }
-
-
-
-
 export default AuthOptions;

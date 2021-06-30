@@ -1,51 +1,56 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, {useState, useEffect, Component, useContext } from 'react';
+import { BrowserRouter, Switch, Route, Redirect, RouteProps } from 'react-router-dom';
 import UserContext from '../context/userContext';
-import Posts from './Posts/Posts';
-import Form from './Form/Form';
+import Register from './Auth/Register';
+import Login from './Auth/Login';
+import Header from './Auth/AuthOptions';
+import AllPosts from './AllPosts';
+import axios from 'axios';
 
-import { Container, Grow, Grid } from '@material-ui/core';
-
-import { useDispatch } from 'react-redux';
-import { getPosts } from '../actions/posts';
-
-
-function Home () {
-    const {userData} = useContext(UserContext);
-    const history = useHistory();
-    
-    const [currentId, setCurrentId] = useState(0);
-    const dispatch = useDispatch();
-    
-    useEffect(() => {
-        dispatch(getPosts());
-    }, [currentId, dispatch]);
+function Home() {
+  
+const {userData,setUserData} = useContext(UserContext);
 
 
-    useEffect(() => {
-        if(!userData.user)
-            history.push("/login");
+useEffect(() => {
+  const checkLoggedIn = async () => {
+    let token = localStorage.getItem("authToken");
+    if(token === null){
+      localStorage.setItem("authToken", "");
+      token = "";
+    }
+    const tokenResponse = await axios.post('http://localhost:5000/users/tokenIsValid', null, {headers: {"authToken": token}});
+    if (tokenResponse.data) {
+      const userRes = await axios.get("http://localhost:5000/users/", {
+        headers: { "authToken": token },
+      });
+      setUserData({
+        token: token,
+        user: userRes.data,
+      });
+    }
+  }
+  checkLoggedIn();
+}, []);
 
-    }, []);
-    return (
-        <div>
-            {userData.user ? (
-                <Container>
-                <Grow in>
-                <Grid container justify="space-between" alignItems="stretch" spacing={3}>
-                    <Posts setCurrentId={setCurrentId} />
-                    <Form currentId={currentId} setCurrentId={setCurrentId}/>
-                </Grid>
-                </Grow>
-                </Container>
-            ) : (
-                <>
-                    <h2>You are not logged in</h2>
-                    <Link to="/login">Login</Link>
-                </>
-            )}
-        </div>
-    );
+const PrivateRoute = () => (
+    userData.user ?
+    <Route path="/posts" component={AllPosts} />:<Redirect to="/login"/>
+)
+
+userData.user?console.log("true"):console.log("false")
+return (
+    <BrowserRouter>
+        <Header />
+        <Switch>
+          <PrivateRoute component={AllPosts} path="/posts"/>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Login} />
+          <Route exact path="/register" component={Register} />
+          <Redirect from='*' to='/login' />
+        </Switch>
+    </BrowserRouter>
+  );
 }
- 
+
 export default Home;

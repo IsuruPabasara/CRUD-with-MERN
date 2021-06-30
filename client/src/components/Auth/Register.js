@@ -26,11 +26,11 @@ function Register () {
                 email, password
             });
             setUserData({
-                token: loginResponse.data.token,
+                //token: loginResponse.data.token,
                 user: loginResponse.data.user
             });
-            localStorage.setItem("auth-token", loginResponse.data.token);
-            history.push("/");
+            localStorage.setItem("authToken", loginResponse.data.token);
+            history.push("/posts");
         } catch(err) {
             err.response.data.msg && setError(err.response.data.msg)
         }
@@ -39,7 +39,7 @@ function Register () {
    
     return ( 
         <Grid container justify="center">
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={4}>    <br/>
             <Paper className={classes.paper}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={submit}>
                 <Typography variant="h6">{`Register`}</Typography>

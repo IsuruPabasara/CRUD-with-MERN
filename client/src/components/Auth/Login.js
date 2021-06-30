@@ -10,8 +10,8 @@ function Login () {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [error, setError] = useState();
+    const { userData, setUserData } = useContext(UserContext);
 
-    const { setUserData } = useContext(UserContext);
     const history = useHistory();
 
     const submit = async (e) => {
@@ -19,20 +19,22 @@ function Login () {
         try{
             const loginUser = {email, password};
             const loginResponse = await axios.post("http://localhost:5000/users/login", loginUser);
-            setUserData({
+            setUserData(({
                 token: loginResponse.data.token,
                 user: loginResponse.data.user
-            });
-            localStorage.setItem("auth-token", loginResponse.data.token);
-            history.push("/");
+            }));
+            localStorage.setItem("authToken", loginResponse.data.token);
+            history.push("/posts");
         } catch(err) {
             err.response.data.msg && setError(err.response.data.msg)
         }
-        
     };
-    
+    console.log("Login")
+console.log(userData)
+
     return (
         <Container >
+            <br/>
         <Grid container justify="center">
         <Grid item xs={12} sm={6}>
             <Paper className={classes.paper}>
