@@ -15,7 +15,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Form from '../../Form/Form';
 import { useState } from 'react';
-import Popup from '../../PopUpForm/PopUpForm';
 
 const Post = ({ post, setCurrentId, currentId}) => {
   const [openPopup, setOpenPopup] = useState(false)
