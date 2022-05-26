@@ -36,7 +36,6 @@ console.log(userData)
         <Container >
             <br/>
         <Grid container justify="center">
-        <Grid item xs={12} sm={6}>
             <Paper className={classes.paper}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={submit}>
                 <Typography variant="h6">{`Login Here`}</Typography>
